@@ -1,6 +1,9 @@
 {
   "presets": [
-    ["latest", { "modules": false}],
-    "react"
+    "env",
+    "react",
+    {
+      "plugins": ["react-relay"]
+    }
   ]
 }
