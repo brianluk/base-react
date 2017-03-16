@@ -3,7 +3,10 @@
     "env",
     "react",
     {
-      "plugins": ["react-relay"]
+      "plugins": [
+        "react-relay",
+        "./build/babelRelayPlugin"
+      ]
     }
   ]
 }

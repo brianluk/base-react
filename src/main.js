@@ -1,74 +1,31 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Relay from 'react-relay';
 
-function UserGreeting(props) {
-  return <h1>Welcome back!</h1>;
-}
-
-function GuestGreeting(props) {
-  return <h1>Please sign up.</h1>;
-}
-
-function LoginButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Login
-    </button>
-  );
-}
-
-function LogoutButton(props) {
-  return (
-    <button onClick={props.onClick}>
-      Logout
-    </button>
-  );
-}
-
-function Greeting(props) {
-  const isLoggedIn = props.isLoggedIn;
-  if (isLoggedIn) {
-    return <UserGreeting />;
-  }
-  return <GuestGreeting />;
-}
-
-class LoginControl extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleLoginClick = this.handleLoginClick.bind(this);
-    this.handleLogoutClick = this.handleLogoutClick.bind(this);
-    this.state = {isLoggedIn: false};
-  }
-
-  handleLoginClick() {
-    this.setState({isLoggedIn: true});
-  }
-
-  handleLogoutClick() {
-    this.setState({isLoggedIn: false});
-  }
-
-  render () {
-    const isLoggedIn = this.state.isLoggedIn;
-
-    let button = null;
-    if (isLoggedIn) {
-      button = <LogoutButton onClick={this.handleLogoutClick} />;
-    } else {
-      button = <LoginButton onClick={this.handleLoginClick} />;
-    }
+class Item extends React.Component {
+  render() {
+    let item = this.props.store.item;
 
     return (
       <div>
-        <Greeting isLoggedIn={isLoggedIn} />
-        {button}
+      <h1><a href={item.url}>{item.title}</a></h1>
+      <h2>{item.score} - {item.by.id}</h2>
       </div>
     );
   }
-}
+};
+
+let item = {
+  id : '1337',
+  url : 'http://google.com',
+  title : 'Google',
+  score : 100,
+  by : { id : 'clay'}
+};
+
+let store = { item };
 
 ReactDOM.render(
-  <LoginControl />,
+  <Item store={store} />,
   document.getElementById('root')
 );

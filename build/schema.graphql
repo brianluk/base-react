@@ -1,0 +1,170 @@
+schema {
+  query: RootQueryType
+}
+
+# Category Name
+type Category implements Node {
+  categoryName: String!
+
+  # The ID of an object
+  id: ID!
+  slug: String!
+}
+
+# Filter Name
+type Filter implements Node {
+  filterName: String!
+
+  # The ID of an object
+  id: ID!
+  slug: String!
+}
+
+# Meta Data for Images
+type Imagemeta implements Node {
+  altTag: String
+  file: String!
+
+  # The ID of an object
+  id: ID!
+  metadata: String!
+}
+
+# Paginated Latest Posts
+type Index implements Node {
+  # The ID of an object
+  id: ID!
+  latestPosts(after: String, before: String, first: Int, last: Int): PostConnection
+}
+
+# An object with an ID
+interface Node {
+  # The id of the object.
+  id: ID!
+}
+
+type PageInfo {
+  # When paginating forwards, the cursor to continue.
+  endCursor: String
+
+  # When paginating forwards, are there more items?
+  hasNextPage: Boolean!
+
+  # When paginating backwards, are there more items?
+  hasPreviousPage: Boolean!
+
+  # When paginating backwards, the cursor to continue.
+  startCursor: String
+}
+
+# Post Article
+type Post implements Node {
+  categories: [Category]
+  filters: [Filter]
+
+  # The ID of an object
+  id: ID!
+  images: Postimage
+  meta: [Postmeta]
+  postAuthor: User
+  postContent: String!
+  postDate: String!
+  postExcerpt: String
+  postName: String
+  postStatus: String!
+  postTitle: String!
+  postType: String!
+  revisions: [Revision]
+  tags: [Tag]
+}
+
+type PostConnection {
+  edges: [PostEdge]
+  pageInfo: PageInfo!
+}
+
+type PostEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: Post
+}
+
+# Images for a Post
+type Postimage implements Node {
+  guid: String!
+
+  # The ID of an object
+  id: ID!
+  imagemetas: [Imagemeta]
+  postMimeType: String!
+  postParent: Int
+  postType: String!
+}
+
+# Meta Data for Posts
+type Postmeta implements Node {
+  bitly: String
+
+  # The ID of an object
+  id: ID!
+  secondaryTitle: String
+}
+
+type Revision implements Node {
+  # The ID of an object
+  id: ID!
+  postAuthor: User
+  postContent: String
+  postDate: String
+  postExcerpt: String
+  postParent: Int
+  postTitle: String
+}
+
+type RootQueryType {
+  index: Index
+
+  # Fetches an object given its ID
+  node(
+    # The id of an object.
+    id: ID!
+  ): Node
+  post(postName: ID): Post
+  tag(slug: String): Tag
+  user(userNicename: String): User
+}
+
+# Tag Name
+type Tag implements Node {
+  # The ID of an object
+  id: ID!
+  latestPosts(after: String, before: String, first: Int, last: Int): PostConnection
+  slug: String!
+  tagName: String!
+}
+
+# Name of Post Author
+type User implements Node {
+  displayName: String!
+
+  # The ID of an object
+  id: ID!
+  latestPosts(after: String, before: String, first: Int, last: Int): PostConnection
+  userEmail: String
+  userNicename: String
+}
+
+type UserConnection {
+  edges: [UserEdge]
+  pageInfo: PageInfo!
+}
+
+type UserEdge {
+  # A cursor for use in pagination
+  cursor: String!
+
+  # The item at the end of the edge
+  node: User
+}
